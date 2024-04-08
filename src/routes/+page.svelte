@@ -9,14 +9,17 @@
 	]
 </script>
 
-<div class="">
-	<img src="favicon.png" alt="PLACEHOLDER PLEASE REMOVE ME">
-	<h1 class="font-header font-black text-3xl">@devTobbe</h1>
-
-	<p >Visit <a href="https://kit.svelte.dev" target="_blank">kit.svelte.dev</a> to read the documentation</p>
+<div class="mx-auto max-w-fit my-6">
+	<div class=" flex flex-col items-center mx-auto max-w-fit">
+		<img src="favicon.png" alt="PLACEHOLDER PLEASE REMOVE ME WITH COOL 3D!">
+		<h1 class="font-header font-black text-3xl">@devTobbe</h1>
+	</div>
+</div>
+	<div class="bg-base02">
+		<div class="mx-auto max-w-fit">
 		{#each buttoncontents as buttoncontent}
 			<Button {buttoncontent}/>
 		{/each}	
-
-</div>
+		</div>
+	</div>
 	
