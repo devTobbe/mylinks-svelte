@@ -7,11 +7,11 @@
     }
 </script>
 
-<button class="bg-base2 m-11 flex align-normal px-24 py-6">
-    <a href="{buttoncontent.link}">
+<button class="flex align-normal">
+    <a href="{buttoncontent.link}" class="bg-base2 m-11  px-24 py-6" target="_blank">
         <div class="flex justify-normal">
             <img src={buttoncontent.src} alt={buttoncontent.srcalt} class="mx-2">
-            <p>{buttoncontent.text}</p>
+            <p class="font-body">{buttoncontent.text}</p>
         </div>
     </a>
 </button>
