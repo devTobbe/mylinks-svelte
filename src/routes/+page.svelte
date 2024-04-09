@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/Button.svelte'
+	import Pfp from '$lib/Pfp.svelte'
 	let buttoncontents = [
 		{text: 'Website', link: 'https://github.com/devTobbe', src: 'home.svg', srcalt: 'Little house icon'},
 		{text: 'Github', link: 'https://github.com/devTobbe', src: 'github.svg', srcalt: 'Github icon'},
@@ -22,4 +23,6 @@
 		{/each}	
 		</div>
 	</div>
+	
+	<Pfp/>
 	
