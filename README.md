@@ -4,10 +4,10 @@ This website is a collection of links where you can find me online. I used this 
 
 ## Personal TODO
 
-- [] Adjust Media Queries
-- [] Add Dimension Warp shader
-- [] Create 3D Model for PFP component
-- [] Add animations
+- [ ] Adjust Media Queries
+- [ ] Add Dimension Warp shader
+- [ ] Create 3D Model for PFP component
+- [ ] Add animations
 
 ---
 
