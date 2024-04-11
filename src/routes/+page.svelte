@@ -11,8 +11,8 @@
 </script>
 
 <div class="mx-auto max-w-fit my-6">
-	<div class=" flex flex-col items-center mx-auto max-w-fit">
-		<img src="favicon.png" alt="PLACEHOLDER PLEASE REMOVE ME WITH COOL 3D!">
+	<div id="threejs-contrainer" class=" flex flex-col items-center mx-auto max-w-fit">
+		<Pfp/>
 		<h1 class="font-header font-black text-3xl">@devTobbe</h1>
 	</div>
 </div>
@@ -24,5 +24,4 @@
 		</div>
 	</div>
 	
-	<Pfp/>
 	
