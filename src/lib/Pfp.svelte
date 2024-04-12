@@ -26,8 +26,8 @@ container.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.set(0, 0, 6);
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.set(0, 0, 14);
 
 // Look into these in the future and tailor to website 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -41,12 +41,28 @@ controls.autoRotate = false;
 controls.target = new THREE.Vector3(0, 1, 0);
 controls.update();
 
-const light = new THREE.AmbientLight(0xffffff)
+const light = new THREE.AmbientLight(0xffffff, 3.15)
+scene.add(light)
 
 const loader = new GLTFLoader();
-loader.load('dev_tobbe.gltf', (gltf) => {
+loader.load('solarizedtobbe.glb', (gltf) => {
   console.log('loading model');
   const mesh = gltf.scene;
+
+  const scale = 0.2;
+  mesh.scale.set(scale, scale, scale);
+
+  mesh.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+            const material = child.material;
+            material.metalness = 0;
+            material.roughness = 0; // Adjust roughness as needed for even lighting
+            material.flatShading = true; // Apply flat shading for no shadows
+            material.vertexColors = true; // Disable vertex colors if not needed
+            material.needsUpdate = true; // Ensure material updates
+            // You may also need to adjust other material properties depending on your model
+        }
+    });
 
   mesh.position.set(0, 1.05, -1);
   scene.add(mesh);
