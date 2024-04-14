@@ -8,6 +8,8 @@ This website is a collection of links where you can find me online. I used this 
 - [ ] Add Dimension Warp shader
 - [ ] Create 3D Model for PFP component
 - [ ] Add animations
+- [ ] Clean up Pfp.svelte
+- [ ] Look into easing lookAt() [this?](https://stackoverflow.com/a/30293939)
 
 ---
 
