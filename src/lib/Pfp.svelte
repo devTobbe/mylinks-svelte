@@ -25,11 +25,34 @@ container.appendChild(renderer.domElement);
 }
 
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.set(0, 0, 14);
 
-// Look into these in the future and tailor to website 
+const target = new THREE.Object3D();
+const intersectionP = new THREE.Vector3();
+const planeN = new THREE.Vector3();
+const plane = new THREE.Plane();
+const mousePos = new THREE.Vector2();
+const raycaster = new THREE.Raycaster();
+
+// The Z position of the target. Further away, less influence the mouse movement will have.
+const influence : number = 12;
+
+window.addEventListener('mousemove', function(e){
+  mousePos.x = (e.clientX / this.window.innerWidth) * 2 - 1;
+  mousePos.y = - (e.clientY / this.window.innerHeight) * 2 + 1;
+  planeN.copy(camera.position).normalize();
+  plane.setFromNormalAndCoplanarPoint(planeN, scene.position);
+
+  raycaster.setFromCamera(mousePos, camera);
+  raycaster.ray.intersectPlane(plane, intersectionP);
+  
+  target.position.set(intersectionP.x, intersectionP.y, influence);
+
+});
+
+
+// Look into these in the future and tailor to website might remove
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
@@ -43,6 +66,8 @@ controls.update();
 
 const light = new THREE.AmbientLight(0xffffff, 3.15)
 scene.add(light)
+
+let iconmesh: THREE.Group<THREE.Object3DEventMap>
 
 const loader = new GLTFLoader();
 loader.load('solarizedtobbe.glb', (gltf) => {
@@ -66,6 +91,9 @@ loader.load('solarizedtobbe.glb', (gltf) => {
 
   mesh.position.set(0, 1.05, -1);
   scene.add(mesh);
+
+  iconmesh = mesh
+  
 });
 
 window.addEventListener('resize', () => {
@@ -75,6 +103,11 @@ window.addEventListener('resize', () => {
 });
 
 function animate() {
+
+  if(iconmesh) {
+    iconmesh.lookAt(target.position);
+  }
+
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);

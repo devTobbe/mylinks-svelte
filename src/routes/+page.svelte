@@ -13,7 +13,7 @@
 <div class="mx-auto max-w-fit my-6">
 	<div id="threejs-contrainer" class=" flex flex-col items-center mx-auto max-w-fit">
 		<Pfp/>
-		<h1 class="font-header font-black text-3xl">@devTobbe</h1>
+		<h1 class="font-header font-black text-3xl text-base03">@devTobbe</h1>
 	</div>
 </div>
 	<div class="bg-base02">
