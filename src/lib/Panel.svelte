@@ -3,28 +3,13 @@
 import { onMount } from "svelte";
 import * as THREE from 'three';
 
-onMount(() => {
+// Simple fragment shader that renders a solid color
+const simpleFragmentShader = `
 
-const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-const renderer = new THREE.WebGLRenderer();
-const light = new THREE.AmbientLight(0xffffff, 3.15)
+uniform vec2 iResolution;
+uniform float iTime;
 
-scene.add(light)
-
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-const container = document.getElementById("threejs-panel")
-
-if (container != null) {
-container.appendChild(renderer.domElement);
-}
-
-const geometry = new THREE.PlaneGeometry(2,2);
-
-//TEMPORARY FRAGMENTSHADER
-const fragmentShader = `const vec3 base03 = vec3(0.0, 0.16862745098039217, 0.21176470588235294);
+const vec3 base03 = vec3(0.0, 0.16862745098039217, 0.21176470588235294);
 const vec3 base02 = vec3(0.027450980392156862, 0.21176470588235294, 0.25882352941176473);
 const vec3 base01 = vec3(0.34509803921568627, 0.43137254901960786, 0.4588235294117647);
 const vec3 base00 = vec3(0.396078431372549, 0.4823529411764706, 0.5137254901960784);
@@ -95,43 +80,52 @@ vec3 getColor(float v) {
     return col;
 }
 
-void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+void main() {
     // fix aspect uv
-    vec2 uv = (fragCoord.xy - .5 * iResolution.xy);
+    vec2 uv = (gl_FragCoord.xy - .5 * iResolution.xy);
     uv = 2. * uv.xy / iResolution.y;
 
     float value = pattern(uv);
     vec3 color = getColor(value);
 
-    fragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color, 1.0);
 }
+
 `;
 
-const vertexShader = `
-    void main() {
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+onMount(() => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const container = document.getElementById("threejs-panel")
+
+    if (container != null) {
+        container.appendChild(renderer.domElement);
     }
-`;
 
-const material = new THREE.ShaderMaterial({
-    uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new THREE.Vector2() }
-    },
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader
+    const geometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
 
-});
+    // Create custom shader material
+    const material = new THREE.ShaderMaterial({
+        fragmentShader: simpleFragmentShader,
+        side: THREE.DoubleSide
+    });
 
-const mesh = new THREE.Mesh(geometry, material)
-scene.add(mesh)
+    const plane = new THREE.Mesh( geometry, material );
+    plane.position.set(0,0,0)
+    scene.add( plane );
 
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
+    camera.position.z = 5;
 
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+
+    animate();
 });
 
 </script>

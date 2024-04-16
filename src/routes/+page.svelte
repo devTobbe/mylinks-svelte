@@ -11,21 +11,27 @@
 		{text: 'Website', link: 'https://github.com/devTobbe', src: 'home.svg', srcalt: 'Little house icon'}
 	]
 
+
+
 </script>
 
-<div class="mx-auto max-w-fit my-6">
 	<div id="threejs-contrainer" class=" flex flex-col items-center mx-auto max-w-fit">
-		<Pfp/>
-		<h1 class="font-header font-black text-3xl text-base03">@devTobbe</h1>
-	</div>
-</div>
-	<Panel/>
-	<div id="threejs-panel" style="width: 100vw; height: 100vh;">
-		<div class="mx-auto max-w-fit">
-		{#each buttoncontents as buttoncontent}
-			<Button {buttoncontent}/>
-		{/each}	
+		<div class="absolute inset-x-0 flex flex-col items-center justify-center">
+
+			<Pfp/>
+			<h1 class="font-header font-black text-3xl text-base03">@devTobbe</h1>
 		</div>
 	</div>
+
+<div id="threejs-panel" class="relative w-full h-full">
+    <div class="absolute inset-x-0 flex flex-col items-center justify-center">
+        <Panel />
+        <div class="">
+            {#each buttoncontents as buttoncontent}
+                <Button {buttoncontent}/>
+            {/each}    
+        </div>
+    </div>
+</div>
 	
 	

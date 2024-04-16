@@ -29,6 +29,7 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerH
 camera.position.set(0, 0, 16);
 
 const target = new THREE.Object3D();
+target.position.z = 20000;
 const intersectionP = new THREE.Vector3();
 const planeN = new THREE.Vector3();
 const plane = new THREE.Plane();
