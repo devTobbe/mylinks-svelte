@@ -8,10 +8,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 onMount(() => {
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true});
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-renderer.setSize(window.innerWidth/2, window.innerHeight/2);
+renderer.setSize(window.innerWidth, window.innerHeight/2.5);
 renderer.setClearColor(0xFDF6E3);
 renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -27,6 +27,7 @@ container.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.set(0, 0, 16);
+camera.lookAt(0,0,0);
 
 const target = new THREE.Object3D();
 target.position.z = 20000;
@@ -97,6 +98,7 @@ loader.load('solarizedtobbe.glb', (gltf) => {
   
 });
 
+
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -105,6 +107,10 @@ window.addEventListener('resize', () => {
 
 function animate() {
 
+
+  const canvas = renderer.domElement;
+	camera.aspect = canvas.clientWidth / canvas.clientHeight;
+	camera.updateProjectionMatrix();
   if(iconmesh) {
     iconmesh.lookAt(target.position);
   }

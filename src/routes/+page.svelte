@@ -14,15 +14,14 @@
 
 
 </script>
-
-	<div id="threejs-contrainer" class=" flex flex-col items-center mx-auto max-w-fit">
+<div class="inset-x-0 flex flex-col items-center justify-center">
+	<div id="threejs-contrainer" class=" block w-full h-full">
 		<div class="absolute inset-x-0 flex flex-col items-center justify-center">
-
 			<Pfp/>
 			<h1 class="font-header font-black text-3xl text-base03">@devTobbe</h1>
 		</div>
 	</div>
-
+</div>
 <div id="threejs-panel" class="relative w-full h-full">
     <div class="absolute inset-x-0 flex flex-col items-center justify-center">
         <Panel />
