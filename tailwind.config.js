@@ -39,7 +39,7 @@ export default {
       'green': '#859900'
     },
     fontFamily: {
-      header: ['Open+Sans', 'sans-serif'],
+      header: ['Open Sans', 'sans-serif'],
       body: ['Roboto']
     },
  },
