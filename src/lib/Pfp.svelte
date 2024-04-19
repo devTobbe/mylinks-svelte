@@ -1,127 +1,116 @@
-
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import * as THREE from 'three';
+	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import { onMount } from 'svelte';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+	onMount(() => {
+		const renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-onMount(() => {
+		renderer.setSize(window.innerWidth, window.innerHeight / 2.5);
+		renderer.setClearColor(0xfdf6e3);
+		renderer.setPixelRatio(window.devicePixelRatio);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true});
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-renderer.setSize(window.innerWidth, window.innerHeight/2.5);
-renderer.setClearColor(0xFDF6E3);
-renderer.setPixelRatio(window.devicePixelRatio);
+		const container = document.getElementById('threejs-contrainer');
 
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+		if (container != null) {
+			container.appendChild(renderer.domElement);
+		}
 
-const container = document.getElementById("threejs-contrainer")
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+		camera.position.set(0, 0, 30);
+		camera.lookAt(0, 0, 0);
 
-if (container != null) {
-container.appendChild(renderer.domElement);
-}
+		const target = new THREE.Object3D();
+		target.position.z = 20000;
+		const intersectionP = new THREE.Vector3();
+		const planeN = new THREE.Vector3();
+		const plane = new THREE.Plane();
+		const mousePos = new THREE.Vector2();
+		const raycaster = new THREE.Raycaster();
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.set(0, 0, 16);
-camera.lookAt(0,0,0);
+		// The Z position of the target. Further away, less influence the mouse movement will have.
+		const influence: number = 12;
 
-const target = new THREE.Object3D();
-target.position.z = 20000;
-const intersectionP = new THREE.Vector3();
-const planeN = new THREE.Vector3();
-const plane = new THREE.Plane();
-const mousePos = new THREE.Vector2();
-const raycaster = new THREE.Raycaster();
+		window.addEventListener('mousemove', function (e) {
+			mousePos.x = (e.clientX / this.window.innerWidth) * 2 - 1;
+			mousePos.y = -(e.clientY / this.window.innerHeight) * 2 + 1;
+			planeN.copy(camera.position).normalize();
+			plane.setFromNormalAndCoplanarPoint(planeN, scene.position);
 
-// The Z position of the target. Further away, less influence the mouse movement will have.
-const influence : number = 12;
+			raycaster.setFromCamera(mousePos, camera);
+			raycaster.ray.intersectPlane(plane, intersectionP);
 
-window.addEventListener('mousemove', function(e){
-  mousePos.x = (e.clientX / this.window.innerWidth) * 2 - 1;
-  mousePos.y = - (e.clientY / this.window.innerHeight) * 2 + 1;
-  planeN.copy(camera.position).normalize();
-  plane.setFromNormalAndCoplanarPoint(planeN, scene.position);
+			target.position.set(intersectionP.x, intersectionP.y, influence);
+		});
 
-  raycaster.setFromCamera(mousePos, camera);
-  raycaster.ray.intersectPlane(plane, intersectionP);
-  
-  target.position.set(intersectionP.x, intersectionP.y, influence);
+		// Look into these in the future and tailor to website might remove
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controls.enableDamping = true;
+		controls.enablePan = false;
+		controls.minDistance = 5;
+		controls.maxDistance = 20;
+		controls.minPolarAngle = 0.5;
+		controls.maxPolarAngle = 1.5;
+		controls.autoRotate = false;
+		controls.target = new THREE.Vector3(0, 1, 0);
+		controls.update();
 
-});
+		const light = new THREE.AmbientLight(0xffffff, 3.15);
+		scene.add(light);
 
+		let iconmesh: THREE.Group<THREE.Object3DEventMap>;
 
-// Look into these in the future and tailor to website might remove
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.enablePan = false;
-controls.minDistance = 5;
-controls.maxDistance = 20;
-controls.minPolarAngle = 0.5;
-controls.maxPolarAngle = 1.5;
-controls.autoRotate = false;
-controls.target = new THREE.Vector3(0, 1, 0);
-controls.update();
+		const loader = new GLTFLoader();
+		loader.load('solarizedtobbe.glb', (gltf) => {
+			console.log('loading model');
+			const mesh = gltf.scene;
 
-const light = new THREE.AmbientLight(0xffffff, 3.15)
-scene.add(light)
+			const scale = 0.2;
+			mesh.scale.set(scale, scale, scale);
 
-let iconmesh: THREE.Group<THREE.Object3DEventMap>
+			mesh.traverse((child) => {
+				if (child instanceof THREE.Mesh && child.material) {
+					const material = child.material;
+					material.metalness = 0;
+					material.roughness = 0; // Adjust roughness as needed for even lighting
+					material.flatShading = true; // Apply flat shading for no shadows
+					material.vertexColors = true; // Disable vertex colors if not needed
+					material.needsUpdate = true; // Ensure material updates
+					// You may also need to adjust other material properties depending on your model
+				}
+			});
 
-const loader = new GLTFLoader();
-loader.load('solarizedtobbe.glb', (gltf) => {
-  console.log('loading model');
-  const mesh = gltf.scene;
+			mesh.position.set(0, 1.05, -1);
+			scene.add(mesh);
 
-  const scale = 0.2;
-  mesh.scale.set(scale, scale, scale);
+			iconmesh = mesh;
+		});
 
-  mesh.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.material) {
-            const material = child.material;
-            material.metalness = 0;
-            material.roughness = 0; // Adjust roughness as needed for even lighting
-            material.flatShading = true; // Apply flat shading for no shadows
-            material.vertexColors = true; // Disable vertex colors if not needed
-            material.needsUpdate = true; // Ensure material updates
-            // You may also need to adjust other material properties depending on your model
-        }
-    });
+		window.addEventListener('resize', () => {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		});
 
-  mesh.position.set(0, 1.05, -1);
-  scene.add(mesh);
+		function animate() {
+			const canvas = renderer.domElement;
+			camera.aspect = canvas.clientWidth / canvas.clientHeight;
+			camera.updateProjectionMatrix();
+			if (iconmesh) {
+				iconmesh.lookAt(target.position);
+			}
 
-  iconmesh = mesh
-  
-});
+			requestAnimationFrame(animate);
+			controls.update();
+			renderer.render(scene, camera);
+		}
 
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-function animate() {
-
-
-  const canvas = renderer.domElement;
-	camera.aspect = canvas.clientWidth / canvas.clientHeight;
-	camera.updateProjectionMatrix();
-  if(iconmesh) {
-    iconmesh.lookAt(target.position);
-  }
-
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-
-animate();
-});
+		animate();
+	});
 </script>
-
-<div  class="m-auto"/>
