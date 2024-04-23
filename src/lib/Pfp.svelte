@@ -23,7 +23,7 @@
 
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-		camera.position.set(0, 0, 30);
+		camera.position.set(0, 0, 20);
 		camera.lookAt(0, 0, 0);
 
 		const target = new THREE.Object3D();
@@ -37,6 +37,23 @@
 		// The Z position of the target. Further away, less influence the mouse movement will have.
 		const influence: number = 12;
 
+		const mediaQuery = window.matchMedia('(max-width: 768px)');
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		// Run OrbitControls setup only if viewport matches the media query
+		if (mediaQuery.matches) {
+			controls.enableDamping = true;
+			controls.dampingFactor = 0.025;
+			controls.enablePan = false;
+			controls.minDistance = 1;
+			controls.maxDistance = 20;
+			controls.minPolarAngle = 1.5;
+			controls.maxPolarAngle = 1.5;
+			controls.autoRotate = false;
+			controls.target = new THREE.Vector3(0, 1, 0);
+			controls.update();
+		}
+
 		window.addEventListener('mousemove', function (e) {
 			mousePos.x = (e.clientX / this.window.innerWidth) * 2 - 1;
 			mousePos.y = -(e.clientY / this.window.innerHeight) * 2 + 1;
@@ -48,18 +65,6 @@
 
 			target.position.set(intersectionP.x, intersectionP.y, influence);
 		});
-
-		// Look into these in the future and tailor to website might remove
-		const controls = new OrbitControls(camera, renderer.domElement);
-		controls.enableDamping = true;
-		controls.enablePan = false;
-		controls.minDistance = 5;
-		controls.maxDistance = 20;
-		controls.minPolarAngle = 0.5;
-		controls.maxPolarAngle = 1.5;
-		controls.autoRotate = false;
-		controls.target = new THREE.Vector3(0, 1, 0);
-		controls.update();
 
 		const light = new THREE.AmbientLight(0xffffff, 3.15);
 		scene.add(light);
@@ -106,8 +111,9 @@
 				iconmesh.lookAt(target.position);
 			}
 
-			requestAnimationFrame(animate);
 			controls.update();
+
+			requestAnimationFrame(animate);
 			renderer.render(scene, camera);
 		}
 
