@@ -1,10 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import * as THREE from 'three';
 
-import { onMount } from "svelte";
-import * as THREE from 'three';
-
-// Simple fragment shader that renders a solid color
-const simpleFragmentShader = `
+	// Simple fragment shader that renders a solid color
+	const simpleFragmentShader = `
 
 uniform vec2 iResolution;
 uniform float iTime;
@@ -93,39 +92,45 @@ void main() {
 
 `;
 
-onMount(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+	onMount(() => {
+		const scene = new THREE.Scene();
+		const camera = new THREE.OrthographicCamera(
+			window.innerWidth / -2,
+			window.innerWidth / 2,
+			window.innerHeight / 2,
+			window.innerHeight / -2,
+			1,
+			1000
+		);
 
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+		const renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const container = document.getElementById("threejs-panel")
+		const container = document.getElementById('threejs-panel');
 
-    if (container != null) {
-        container.appendChild(renderer.domElement);
-    }
+		if (container != null) {
+			container.appendChild(renderer.domElement);
+		}
 
-    const geometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
+		const geometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
 
-    // Create custom shader material
-    const material = new THREE.ShaderMaterial({
-        fragmentShader: simpleFragmentShader,
-        side: THREE.DoubleSide
-    });
+		// Create custom shader material
+		const material = new THREE.ShaderMaterial({
+			fragmentShader: simpleFragmentShader,
+			side: THREE.DoubleSide
+		});
 
-    const plane = new THREE.Mesh( geometry, material );
-    plane.position.set(0,0,0)
-    scene.add( plane );
+		const plane = new THREE.Mesh(geometry, material);
+		plane.position.set(0, 0, 0);
+		scene.add(plane);
 
-    camera.position.z = 5;
+		camera.position.z = 5;
 
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
+		function animate() {
+			requestAnimationFrame(animate);
+			renderer.render(scene, camera);
+		}
 
-    animate();
-});
-
+		animate();
+	});
 </script>
