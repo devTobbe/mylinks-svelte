@@ -37,21 +37,24 @@
 		// The Z position of the target. Further away, less influence the mouse movement will have.
 		const influence: number = 12;
 
-		const mediaQuery = window.matchMedia('(max-width: 768px)');
+		const mediaQuery = window.matchMedia('(min-width: 640px)');
 
 		const controls = new OrbitControls(camera, renderer.domElement);
+
+		controls.enableDamping = true;
+		controls.dampingFactor = 0.025;
+		controls.enablePan = false;
+		controls.minDistance = 1;
+		controls.maxDistance = 20;
+		controls.minPolarAngle = 1.5;
+		controls.maxPolarAngle = 1.5;
+		controls.autoRotate = false;
+		controls.target = new THREE.Vector3(0, 1, 0);
+		controls.update();
+
 		// Run OrbitControls setup only if viewport matches the media query
 		if (mediaQuery.matches) {
-			controls.enableDamping = true;
-			controls.dampingFactor = 0.025;
-			controls.enablePan = false;
-			controls.minDistance = 1;
-			controls.maxDistance = 20;
-			controls.minPolarAngle = 1.5;
-			controls.maxPolarAngle = 1.5;
-			controls.autoRotate = false;
-			controls.target = new THREE.Vector3(0, 1, 0);
-			controls.update();
+			controls.enabled = false;
 		}
 
 		window.addEventListener('mousemove', function (e) {
