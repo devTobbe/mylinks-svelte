@@ -29,7 +29,7 @@ export default {
 				base2: '#eee8d5',
 				base3: '#fdf6e3',
 				base385: '#fdf6e3D9',
-				base350: '#fdf6e380',
+				base350: '#fdf6e32d',
 				yellow: '#b58900',
 				orange: '#cb4b16',
 				red: '#dc322f',
