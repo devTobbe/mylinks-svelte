@@ -4,6 +4,8 @@
 	import Panel from '$lib/Panel.svelte';
 	import buttondata from '$lib/data/buttondata.json';
 
+	import { M } from 'svelte-motion';
+
 	let buttoncontents = buttondata;
 </script>
 

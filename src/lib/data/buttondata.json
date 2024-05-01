@@ -3,7 +3,7 @@
 		"text": "Website",
 		"link": "https://github.com/devTobbe",
 		"src": "home.svg",
-		"srcalt": "Little house icon"
+		"srcalt": "home icon"
 	},
 	{
 		"text": "Github",
@@ -12,10 +12,10 @@
 		"srcalt": "Github icon"
 	},
 	{
-		"text": "Website",
-		"link": "https://github.com/devTobbe",
-		"src": "home.svg",
-		"srcalt": "Little house icon"
+		"text": "X",
+		"link": "https://x.com/devTobbe",
+		"src": "x.svg",
+		"srcalt": "X icon"
 	},
 	{
 		"text": "Website",
